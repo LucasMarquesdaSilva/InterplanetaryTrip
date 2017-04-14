@@ -13,7 +13,7 @@ namespace InterplanetaryTrip
     {
         static void Main(string[] args)
         {
-            string resposta = "Sim";
+            var RespostaUsuario = "";
             do
             {
                 Console.WriteLine("Bem vindo ao Sistema de Viagens Interplanetárias!");
@@ -23,7 +23,8 @@ namespace InterplanetaryTrip
                 Console.WriteLine("2 - Consulta");
                 Console.WriteLine("3 - Atualização");
                 Console.WriteLine("4 - Remoção");
-                var RespostaUsuario = Console.ReadLine();
+                Console.WriteLine("5 - Sair");
+                RespostaUsuario = Console.ReadLine();
 
                 if (RespostaUsuario == "1")
                 {
@@ -35,60 +36,172 @@ namespace InterplanetaryTrip
                 }
                 else if (RespostaUsuario == "3")
                 {
-                    Console.WriteLine("Menu 3 - Atualizãção");
-                    Console.WriteLine("-------------------------------------------------");
-                    Console.WriteLine("1 - Atualizar Planeta");
-                    Console.WriteLine("2 - Atualizar Cliente");
-                    Console.WriteLine("3 - Atualizar Transporte");
-                    Console.WriteLine("4 - Atualizar Viagem");
-                    var RespostaUsuarioAtualizacao = Console.ReadLine();
-                    if (RespostaUsuarioAtualizacao == "1")
-                    {
-
-                    }
-                    else if (RespostaUsuarioAtualizacao == "2")
-                    {
-
-                    }
-                    else if (RespostaUsuarioAtualizacao == "3")
-                    {
-
-                    }
-                    else if (RespostaUsuarioAtualizacao == "4")
-                    {
-
-                    }
+                    navegarMenuAtualizacaoGeral();
                 }
                 else if (RespostaUsuario == "4")
                 {
-                    Console.WriteLine("Menu 4 - Excluir");
-                    Console.WriteLine("-------------------------------------------------");
-                    Console.WriteLine("1 - Excluir Planeta");
-                    Console.WriteLine("2 - Excluir Cliente");
-                    Console.WriteLine("3 - Excluir Transporte");
-                    Console.WriteLine("4 - Excluir Viagem");
-                    var RespostaUsuarioExcluir = Console.ReadLine();
-                    if (RespostaUsuarioExcluir == "1")
-                    {
-                        navegarRemocaoPlaneta();
-                    }
-                    else if (RespostaUsuarioExcluir == "2")
-                    {
-
-                    }
-                    else if (RespostaUsuarioExcluir == "3")
-                    {
-
-                    }
-                    else if (RespostaUsuarioExcluir == "4")
-                    {
-
-                    }
+                    navegarMenuExclusaoGeral();
                 }
-                Console.WriteLine("Deseja continuar utilizando o nosso sistema?");
-                resposta = Console.ReadLine().ToLower();
 
-            } while ((resposta == "sim"));
+            } while (RespostaUsuario != "5");
+        }
+
+        private static void navegarMenuExclusaoGeral()
+        {
+            Console.WriteLine("Menu 4 - Excluir");
+            Console.WriteLine("-------------------------------------------------");
+            Console.WriteLine("1 - Excluir Planeta");
+            Console.WriteLine("2 - Excluir Cliente");
+            Console.WriteLine("3 - Excluir Transporte");
+            Console.WriteLine("4 - Excluir Viagem");
+            var RespostaUsuarioExcluir = Console.ReadLine();
+            if (RespostaUsuarioExcluir == "1")
+            {
+                navegarRemocaoPlaneta();
+            }
+            else if (RespostaUsuarioExcluir == "2")
+            {
+                try
+                {
+                    Console.WriteLine("Digite o nome do cliente que voce deseja excluir:");
+                    var nomeCliente = Console.ReadLine();
+                    RepositorioCrud<Cliente> operacaoCliente = new RepositorioCrud<Cliente>();
+                    var clientes = operacaoCliente.Consultar("cliente_sps", nomeCliente, "@Nome");
+                    foreach (var cliente in clientes)
+                    {
+                        Console.WriteLine(cliente.ToString());
+                    }
+                    Console.WriteLine("Informe o id do planeta para ser excluido: ");
+                    var idCliente = Console.ReadLine();
+                    operacaoCliente.Remover("cliente_spd", Convert.ToInt32(idCliente), "@id");
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Ops: {0}", e.Message);
+                }
+            }
+            else if (RespostaUsuarioExcluir == "3")
+            {
+
+            }
+            else if (RespostaUsuarioExcluir == "4")
+            {
+
+            }
+        }
+
+        private static void navegarMenuAtualizacaoGeral()
+        {
+            var RespostaUsuarioAtualizacao = "";
+            do
+            {
+                Console.WriteLine("Menu 3 - Atualizãção");
+                Console.WriteLine("-------------------------------------------------");
+                Console.WriteLine("1 - Atualizar Planeta");
+                Console.WriteLine("2 - Atualizar Cliente");
+                Console.WriteLine("3 - Atualizar Transporte");
+                Console.WriteLine("4 - Atualizar Viagem");
+                Console.WriteLine("5 - Voltar");
+
+                RespostaUsuarioAtualizacao = Console.ReadLine();
+                if (RespostaUsuarioAtualizacao == "1")
+                {
+                    navegarAtualizacaoPlaneta();
+
+                }
+                else if (RespostaUsuarioAtualizacao == "2")
+                {
+                    navegarUsuarioAtualizacao();
+
+                }
+                else if (RespostaUsuarioAtualizacao == "3")
+                {
+
+                }
+                else if (RespostaUsuarioAtualizacao == "4")
+                {
+
+                }
+            } while (RespostaUsuarioAtualizacao != "5");
+        }
+
+        private static void navegarUsuarioAtualizacao()
+        {
+            Console.WriteLine("Digite o Nome do Cliente para ser atualizado:");
+            var nomeCliente = Console.ReadLine();
+            RepositorioCrud<Cliente> operacaoCliente = new RepositorioCrud<Cliente>();
+            var clientes = operacaoCliente.Consultar("planeta_sps", nomeCliente, "@Nome");
+            foreach (var cliente in clientes)
+            {
+                Console.WriteLine(cliente.ToString());
+            }
+            Console.WriteLine("Digite o id do Planeta para ser atualizado:");
+            var idCliente = Convert.ToInt32(Console.ReadLine());
+            foreach (var cliente in clientes)
+            {
+                if (cliente.Id == idCliente)
+                {
+                    Console.WriteLine("Nome Atual: {0}", cliente.Nome);
+                    Console.WriteLine("Nome para atualizar:");
+                    cliente.Nome = Console.ReadLine();
+                    Console.WriteLine("Número de Documento Atual: {0}", cliente.Documento);
+                    Console.WriteLine("Número de Documento para atualizar:");
+                    cliente.Documento = Console.ReadLine();
+                    Console.WriteLine("Quantidade de braços atualmente: {0}", cliente.QtdBracos);
+                    Console.WriteLine("Quantidade de braços para atualizar:");
+                    cliente.QtdBracos = Convert.ToInt32(Console.ReadLine());
+                    Console.WriteLine("Quantidade de pernas atualmente: {0}", cliente.QtdPernas);
+                    Console.WriteLine("Quantidade de pernas para atualizar:");
+                    cliente.QtdPernas = Convert.ToInt32(Console.ReadLine());
+                    Console.WriteLine("Quantidade de cabeça(s) atualmente: {0}", cliente.QtdCabeca);
+                    Console.WriteLine("Quantidade de cabeça(s) para atualizar:");
+                    cliente.QtdCabeca = Convert.ToInt32(Console.ReadLine());
+                    Console.WriteLine("Respira: {0}", cliente.Respira);
+                    Console.WriteLine("Ainda respira?");
+                    cliente.Respira = Console.ReadLine().ToLower() == "sim" ? true : false;
+
+                    operacaoCliente.Alterar(cliente, "cliente_spu");
+                }
+                else
+                {
+                    Console.WriteLine("Não Existe cliente com esse nome!");
+                }
+            }
+        }
+
+        private static void navegarAtualizacaoPlaneta()
+        {
+            Console.WriteLine("Digite o Nome do planeta para ser atualizado:");
+            var nomePlaneta = Console.ReadLine();
+            RepositorioCrud<Planeta> operacaoPlaneta = new RepositorioCrud<Planeta>();
+            var planetas = operacaoPlaneta.Consultar("planeta_sps", nomePlaneta, "@Nome");
+            foreach (var item in planetas)
+            {
+                Console.WriteLine(item.ToString());
+            }
+            Console.WriteLine("Digite o id do Planeta para ser atualizado:");
+            var idPlaneta = Convert.ToInt32(Console.ReadLine());
+            foreach (var planeta in planetas)
+            {
+                if (planeta.Id == idPlaneta)
+                {
+                    Console.WriteLine("Nome Atual: {0}", planeta.Nome);
+                    Console.WriteLine("Nome para atualizar:");
+                    planeta.Nome = Console.ReadLine();
+                    Console.WriteLine("Descrição Atual: {0}", planeta.Descricao);
+                    Console.WriteLine("Descrição para atualizar:");
+                    planeta.Descricao = Console.ReadLine();
+                    Console.WriteLine("Possui Oxigênio: {0}", planeta.PossuiOxigenio);
+                    Console.WriteLine("Ainda possuí oxigênio?");
+                    planeta.PossuiOxigenio = Console.ReadLine().ToLower() == "sim" ? true : false;
+
+                    operacaoPlaneta.Alterar(planeta, "planeta_spu");
+                }
+                else
+                {
+                    Console.WriteLine("Não Existe planeta com esse nome!");
+                }
+            }
         }
 
         private static void navegarRemocaoPlaneta()
@@ -115,29 +228,34 @@ namespace InterplanetaryTrip
 
         private static void navegarMenuConsultaGeral()
         {
-            Console.WriteLine("Menu 2 - Consulta");
-            Console.WriteLine("-------------------------------------------------");
-            Console.WriteLine("1 - Consultar Planeta");
-            Console.WriteLine("2 - Consultar Cliente");
-            Console.WriteLine("3 - Consultar Transporte");
-            Console.WriteLine("4 - Consultar Viagem");
-            var RespostaUsuarioConsulta = Console.ReadLine();
-            if (RespostaUsuarioConsulta == "1")
+            var RespostaUsuarioConsulta = "";
+            do
             {
-                navegarConsultaPlaneta();
-            }
-            else if (RespostaUsuarioConsulta == "2")
-            {
-                navegarConsultaCliente();
-            }
-            else if (RespostaUsuarioConsulta == "3")
-            {
-                navegarConsultaTransporte();
-            }
-            else if (RespostaUsuarioConsulta == "4")
-            {
-                navegarConsultaViagem();
-            }
+                Console.WriteLine("Menu 2 - Consulta");
+                Console.WriteLine("-------------------------------------------------");
+                Console.WriteLine("1 - Consultar Planeta");
+                Console.WriteLine("2 - Consultar Cliente");
+                Console.WriteLine("3 - Consultar Transporte");
+                Console.WriteLine("4 - Consultar Viagem");
+                Console.WriteLine("5 - Voltar");
+                RespostaUsuarioConsulta = Console.ReadLine();
+                if (RespostaUsuarioConsulta == "1")
+                {
+                    navegarConsultaPlaneta();
+                }
+                else if (RespostaUsuarioConsulta == "2")
+                {
+                    navegarConsultaCliente();
+                }
+                else if (RespostaUsuarioConsulta == "3")
+                {
+                    navegarConsultaTransporte();
+                }
+                else if (RespostaUsuarioConsulta == "4")
+                {
+                    navegarConsultaViagem();
+                }
+            } while (RespostaUsuarioConsulta != "5");
         }
 
         private static void navegarConsultaViagem()
@@ -207,6 +325,8 @@ namespace InterplanetaryTrip
                 var respostaConsultaPlaneta = Console.ReadLine();
                 RepositorioCrud<Planeta> consultaPlaneta = new RepositorioCrud<Planeta>();
                 var planetas = consultaPlaneta.Consultar("planeta_sps", respostaConsultaPlaneta, "@Nome");
+                if (planetas.Count == 0)
+                    Console.WriteLine("Não existe um planeta com o nome {0}", respostaConsultaPlaneta);
                 foreach (var item in planetas)
                 {
                     Console.WriteLine(item.ToString());
@@ -221,32 +341,38 @@ namespace InterplanetaryTrip
 
         private static void navegarMenuCadastroGeral()
         {
-            Console.WriteLine("Menu 1 - Cadastro");
-            Console.WriteLine("-------------------------------------------------");
-            Console.WriteLine("1 - Cadastrar Planeta");
-            Console.WriteLine("2 - Cadastrar Cliente");
-            Console.WriteLine("3 - Cadastrar Transporte");
-            Console.WriteLine("4 - Cadastrar Viagem");
-            var respostaUsuarioCadastro = Console.ReadLine();
-            if (respostaUsuarioCadastro == "1")
+            var respostaUsuarioCadastro = "";
+            do
             {
-                navegarCadastroPlaneta();
+                Console.WriteLine("Menu 1 - Cadastro");
+                Console.WriteLine("-------------------------------------------------");
+                Console.WriteLine("1 - Cadastrar Planeta");
+                Console.WriteLine("2 - Cadastrar Cliente");
+                Console.WriteLine("3 - Cadastrar Transporte");
+                Console.WriteLine("4 - Cadastrar Viagem");
+                Console.WriteLine("5 - Voltar");
+                respostaUsuarioCadastro = Console.ReadLine();
+                if (respostaUsuarioCadastro == "1")
+                {
+                    navegarCadastroPlaneta();
 
-            }
-            else if (respostaUsuarioCadastro == "2")
-            {
-                navegarCadastroCliente();
-            }
-            else if (respostaUsuarioCadastro == "3")
-            {
-                navegarCadastroTransporte();
+                }
+                else if (respostaUsuarioCadastro == "2")
+                {
+                    navegarCadastroCliente();
+                }
+                else if (respostaUsuarioCadastro == "3")
+                {
+                    navegarCadastroTransporte();
 
-            }
-            else if (respostaUsuarioCadastro == "4")
-            {
-                navegarCadastroViagem();
+                }
+                else if (respostaUsuarioCadastro == "4")
+                {
+                    navegarCadastroViagem();
 
-            }
+                }
+            } while (respostaUsuarioCadastro != "5");
+
         }
 
         private static void navegarCadastroViagem()

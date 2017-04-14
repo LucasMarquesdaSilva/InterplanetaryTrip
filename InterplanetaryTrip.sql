@@ -112,13 +112,13 @@ BEGIN
 END
 GO
 CREATE PROCEDURE cliente_spd(
-	@Nome VARCHAR(200)
+	@Id INT
 )
 AS
 
 BEGIN
-	DELETE FROM Cliente WHERE Nome = @Nome
-	SELECT 'Cliente '+ @Nome + ' deletado com sucesso!' AS [Mensagem]
+	DELETE FROM Cliente WHERE id = @Id
+	SELECT 'Cliente  deletado com sucesso!' AS [Mensagem]
 
 END
 
@@ -141,10 +141,10 @@ END
 
 GO
 CREATE PROCEDURE planeta_spu(
+	@Id INT,
 	@Nome VARCHAR(200),
 	@Descricao VARCHAR(200),
-	@PossuiOxigenio	BIT,
-	@NomePlanetaParaTroca VARCHAR(200)
+	@PossuiOxigenio	BIT
 )
 
 AS
@@ -156,9 +156,8 @@ BEGIN
 		Descricao = @Descricao, 
 		PossuiOxigenio = @PossuiOxigenio
 	WHERE 
-		Nome = @NomePlanetaParaTroca
-	SELECT ('Planeta ' + @Nome + ' atualizado com sucesso!') AS [Mensagem]
-
+		Id = @Id
+	SELECT ('Planeta atualizado com sucesso!') AS [Mensagem]
 END
 GO
 CREATE PROCEDURE planeta_sps(
@@ -237,6 +236,7 @@ CREATE PROCEDURE viagem_sps(
 
 AS
 BEGIN
+
 SELECT 
 		V.Id, C.Nome AS nomeCliente, C.Documento,
 		C.Respira, PO.Nome as NomePlanetaOrigem,
