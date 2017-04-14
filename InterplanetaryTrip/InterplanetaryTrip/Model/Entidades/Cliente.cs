@@ -155,8 +155,9 @@ namespace InterplanetaryTrip.Model.classes
 
         public override string ToString()
         {
-            return string.Format("Id: {0}, Nome: {1}, Documento: {2}, Tipo Especie: {3} Cor: {4}, Quantidade de Braços: {5}, Quantidade de Pernas: {6},"
-                + " Quantidade de Cabeca: {7}, Respira: {8}", this.Id, this.Nome, this.Documento, this.TipoEspecie, this.Cor, this.QtdBracos, this.QtdPernas, this.QtdCabeca, this.Respira);
+            return string.Format("Id: {0}, Nome: {1}, Documento: {2}, Tipo Especie: {3} Cor: {4}, Quantidade de Braços: {5},"
+                + " Quantidade de Pernas: {6}, Quantidade de Cabeca: {7}, Respira: {8}", this.Id, this.Nome, this.Documento, 
+                this.TipoEspecie, this.Cor, this.QtdBracos, this.QtdPernas, this.QtdCabeca, this.Respira == true ? "Sim" : "Não");
         }
     }
 }

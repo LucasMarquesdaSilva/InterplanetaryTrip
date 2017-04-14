@@ -87,7 +87,8 @@ namespace InterplanetaryTrip.Model.Entidades
 
         public override string ToString()
         {
-            return string.Format("Id: {0}, Nome do Planeta: {1}, Descrição: {2}, Possui Oxigênio : {3}", this.Id, this.Nome, this.Descricao, this.PossuiOxigenio);
+            return string.Format("Id: {0}, Nome do Planeta: {1}, Descrição: {2}, Possui Oxigênio : {3}", 
+                this.Id, this.Nome, this.Descricao, this.PossuiOxigenio == true ? "Sim" : "Não");
         }
     }
 }

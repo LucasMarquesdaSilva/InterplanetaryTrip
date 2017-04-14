@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace InterplanetaryTrip.Model.Entidades
 {
-    class ViagemConsulta : Viagem
+    class ViagemConsulta
     {
         private int _Id;
         private string _nomeCliente;
@@ -14,10 +14,11 @@ namespace InterplanetaryTrip.Model.Entidades
         private bool _Respira;
         private string _NomePlanetaOrigem;
         private string _NomePlanetaDestino;
-        private string _TransporteNome;
-        private string _Terreno;
         private decimal _Valor;
         private string _Tempo;
+        private string _TransporteNome;
+        private string _Terreno;
+
 
         public new int Id
         {
@@ -128,7 +129,10 @@ namespace InterplanetaryTrip.Model.Entidades
                 this._Terreno = value;
             }
         }
+        public ViagemConsulta()
+        {
 
+        }
         public ViagemConsulta(int Id, string nomeCliente, string documento, bool Respira, string nomePlanetaOrigem,
             decimal valor, string tempo, string transporteNome, string terreno)
         {
@@ -145,10 +149,10 @@ namespace InterplanetaryTrip.Model.Entidades
         }
         public override string ToString()
         {
-            return string.Format("Id: {0}, Nome do cliente: {1}, Documento: {2}, Respira: {3}. Nome do planeta de origem: {4}, "
+            return string.Format("Id: {0}, Nome do cliente: {1}, Documento: {2}, Respira: {3}, Nome do planeta de origem: {4}, "
                 + "Nome do Planeta de Destino: {5}, valor: R$ {6}, Tempo: {7}, Nome do transporte: {8}, Tipo de terreno do transporte: {9}",
-               this.Id, this.nomeCliente, this.documento, this.Respira, this.NomePlanetaOrigem, this.NomePlanetaDestino,
-               this.valor, this.Tempo, this.TransporteNome, this.Terreno);
+               this.Id, this.nomeCliente, this.documento, this.Respira == true ? "Sim" : "Não", this.NomePlanetaOrigem, this.NomePlanetaDestino,
+               this.Valor, this.Tempo, this.TransporteNome, this.Terreno);
         }
     }
 }

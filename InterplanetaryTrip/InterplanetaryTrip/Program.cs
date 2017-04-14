@@ -87,7 +87,7 @@ namespace InterplanetaryTrip
                 }
                 Console.WriteLine("Deseja continuar utilizando o nosso sistema?");
                 resposta = Console.ReadLine().ToLower();
-                
+
             } while ((resposta == "sim"));
         }
 
@@ -266,7 +266,8 @@ namespace InterplanetaryTrip
             Console.WriteLine("Tempo:");
             var tempo = Console.ReadLine();
 
-            Viagem viagem = new Viagem(Convert.ToInt32(idPlanetaOrigem), Convert.ToInt32(idPlanetaDestino), Convert.ToInt32(idCliente), Convert.ToInt32(idTransporte), Convert.ToDouble(valor), tempo);
+            Viagem viagem = new Viagem(Convert.ToInt32(idPlanetaOrigem), Convert.ToInt32(idPlanetaDestino),
+                Convert.ToInt32(idCliente), Convert.ToInt32(idTransporte), Convert.ToDecimal(valor), tempo);
             var repositorioViagem = new RepositorioCrud<Viagem>();
             repositorioViagem.Cadastrar(viagem, "viagem_spi");
         }

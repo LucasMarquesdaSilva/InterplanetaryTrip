@@ -30,7 +30,7 @@ CREATE TABLE Transporte(
 	Terreno		VARCHAR(200)	NOT NULL,
 	PRIMARY KEY (Id)
 )
-select * from Planeta
+
 CREATE TABLE Viagem(
 	 Id					INT IDENTITY,
      IdPlanetaOrigem	INT				NOT NULL,
@@ -175,7 +175,6 @@ CREATE PROCEDURE planeta_spd(
 )
 
 AS
-drop procedure planeta_spd
 BEGIN
 	DELETE FROM Planeta WHERE Id = @id
 
@@ -195,7 +194,6 @@ CREATE PROCEDURE viagem_spi(
 )
 
 AS
-select * from Transporte
 BEGIN
 	INSERT  
 		INTO Viagem
@@ -203,7 +201,6 @@ BEGIN
 		(@IdPlanetaOrigem, @IdPlanetaDestino, @IdCliente, @IdTransporte, @Valor, @Tempo)
 
 	SELECT 'Cadastro Realizado com sucesso!' AS [Mensagem]
-
 END
 GO
 CREATE PROCEDURE viagem_spu(
@@ -241,10 +238,10 @@ CREATE PROCEDURE viagem_sps(
 AS
 BEGIN
 SELECT 
-		V.Id, C.Nome, C.Documento,
-		C.Respira, PO.Nome as PlanetaOrigem,
-		PD.Nome as PlanetaDestino,  
-		V.Valor, V.Tempo, T.Nome, T.Terreno
+		V.Id, C.Nome AS nomeCliente, C.Documento,
+		C.Respira, PO.Nome as NomePlanetaOrigem,
+		PD.Nome as NomePlanetaDestino,  
+		V.Valor, V.Tempo, T.Nome  as TransporteNome, T.Terreno
 	FROM
 		Cliente C
 		join Viagem V on V.IdCliente = C.Id

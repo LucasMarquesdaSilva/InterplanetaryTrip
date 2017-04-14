@@ -25,3 +25,9 @@ C:\Users\Lucas Marques\Documents\Viceri\Treinamento Cloter\InterplanetaryTrip\In
 C:\Users\Lucas Marques\Documents\Viceri\Treinamento Cloter\InterplanetaryTrip\InterplanetaryTrip\bin\Debug\InterplanetaryTrip.pdb
 E:\Viceri\cloter\Treinamento Cloter\InterplanetaryTrip\InterplanetaryTrip\obj\Debug\InterplanetaryTrip.csprojResolveAssemblyReference.cache
 C:\Users\Lucas Marques\Documents\Viceri\Treinamento Cloter\InterplanetaryTrip\InterplanetaryTrip\obj\Debug\InterplanetaryTrip.csprojResolveAssemblyReference.cache
+C:\Users\Lucas Marques\Documents\Repositorios\InterplanetaryTrip\InterplanetaryTrip\InterplanetaryTrip\bin\Debug\InterplanetaryTrip.exe.config
+C:\Users\Lucas Marques\Documents\Repositorios\InterplanetaryTrip\InterplanetaryTrip\InterplanetaryTrip\obj\Debug\InterplanetaryTrip.exe
+C:\Users\Lucas Marques\Documents\Repositorios\InterplanetaryTrip\InterplanetaryTrip\InterplanetaryTrip\obj\Debug\InterplanetaryTrip.pdb
+C:\Users\Lucas Marques\Documents\Repositorios\InterplanetaryTrip\InterplanetaryTrip\InterplanetaryTrip\bin\Debug\InterplanetaryTrip.exe
+C:\Users\Lucas Marques\Documents\Repositorios\InterplanetaryTrip\InterplanetaryTrip\InterplanetaryTrip\bin\Debug\InterplanetaryTrip.pdb
+C:\Users\Lucas Marques\Documents\Repositorios\InterplanetaryTrip\InterplanetaryTrip\InterplanetaryTrip\obj\Debug\InterplanetaryTrip.csprojResolveAssemblyReference.cache
