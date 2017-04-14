@@ -1,0 +1,27 @@
+c:\users\lucas marques\documents\visual studio 2015\Projects\InterplanetaryTrip\InterplanetaryTrip\bin\Debug\InterplanetaryTrip.exe.config
+c:\users\lucas marques\documents\visual studio 2015\Projects\InterplanetaryTrip\InterplanetaryTrip\bin\Debug\InterplanetaryTrip.exe
+c:\users\lucas marques\documents\visual studio 2015\Projects\InterplanetaryTrip\InterplanetaryTrip\bin\Debug\InterplanetaryTrip.pdb
+c:\users\lucas marques\documents\visual studio 2015\Projects\InterplanetaryTrip\InterplanetaryTrip\obj\Debug\InterplanetaryTrip.csprojResolveAssemblyReference.cache
+c:\users\lucas marques\documents\visual studio 2015\Projects\InterplanetaryTrip\InterplanetaryTrip\obj\Debug\InterplanetaryTrip.exe
+c:\users\lucas marques\documents\visual studio 2015\Projects\InterplanetaryTrip\InterplanetaryTrip\obj\Debug\InterplanetaryTrip.pdb
+C:\Users\lmarques\Documents\Treinamento Cloter\InterplanetaryTrip\InterplanetaryTrip\bin\Debug\InterplanetaryTrip.exe.config
+C:\Users\lmarques\Documents\Treinamento Cloter\InterplanetaryTrip\InterplanetaryTrip\obj\Debug\InterplanetaryTrip.exe
+C:\Users\lmarques\Documents\Treinamento Cloter\InterplanetaryTrip\InterplanetaryTrip\obj\Debug\InterplanetaryTrip.pdb
+C:\Users\lmarques\Documents\Treinamento Cloter\InterplanetaryTrip\InterplanetaryTrip\bin\Debug\InterplanetaryTrip.exe
+C:\Users\lmarques\Documents\Treinamento Cloter\InterplanetaryTrip\InterplanetaryTrip\bin\Debug\InterplanetaryTrip.pdb
+C:\Users\lmarques\Documents\Treinamento Cloter\InterplanetaryTrip\InterplanetaryTrip\obj\Debug\InterplanetaryTrip.csprojResolveAssemblyReference.cache
+E:\Viceri\cloter\InterplanetaryTrip\InterplanetaryTrip\bin\Debug\InterplanetaryTrip.exe.config
+E:\Viceri\cloter\InterplanetaryTrip\InterplanetaryTrip\obj\Debug\InterplanetaryTrip.exe
+E:\Viceri\cloter\InterplanetaryTrip\InterplanetaryTrip\obj\Debug\InterplanetaryTrip.pdb
+E:\Viceri\cloter\Treinamento Cloter\InterplanetaryTrip\InterplanetaryTrip\bin\Debug\InterplanetaryTrip.exe.config
+E:\Viceri\cloter\Treinamento Cloter\InterplanetaryTrip\InterplanetaryTrip\obj\Debug\InterplanetaryTrip.exe
+E:\Viceri\cloter\Treinamento Cloter\InterplanetaryTrip\InterplanetaryTrip\obj\Debug\InterplanetaryTrip.pdb
+E:\Viceri\cloter\Treinamento Cloter\InterplanetaryTrip\InterplanetaryTrip\bin\Debug\InterplanetaryTrip.exe
+E:\Viceri\cloter\Treinamento Cloter\InterplanetaryTrip\InterplanetaryTrip\bin\Debug\InterplanetaryTrip.pdb
+C:\Users\Lucas Marques\Documents\Viceri\Treinamento Cloter\InterplanetaryTrip\InterplanetaryTrip\bin\Debug\InterplanetaryTrip.exe.config
+C:\Users\Lucas Marques\Documents\Viceri\Treinamento Cloter\InterplanetaryTrip\InterplanetaryTrip\obj\Debug\InterplanetaryTrip.exe
+C:\Users\Lucas Marques\Documents\Viceri\Treinamento Cloter\InterplanetaryTrip\InterplanetaryTrip\obj\Debug\InterplanetaryTrip.pdb
+C:\Users\Lucas Marques\Documents\Viceri\Treinamento Cloter\InterplanetaryTrip\InterplanetaryTrip\bin\Debug\InterplanetaryTrip.exe
+C:\Users\Lucas Marques\Documents\Viceri\Treinamento Cloter\InterplanetaryTrip\InterplanetaryTrip\bin\Debug\InterplanetaryTrip.pdb
+E:\Viceri\cloter\Treinamento Cloter\InterplanetaryTrip\InterplanetaryTrip\obj\Debug\InterplanetaryTrip.csprojResolveAssemblyReference.cache
+C:\Users\Lucas Marques\Documents\Viceri\Treinamento Cloter\InterplanetaryTrip\InterplanetaryTrip\obj\Debug\InterplanetaryTrip.csprojResolveAssemblyReference.cache
