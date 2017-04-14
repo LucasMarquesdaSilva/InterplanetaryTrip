@@ -119,5 +119,12 @@ namespace InterplanetaryTrip.Model.Entidades
             this._Valor = Valor;
             this._Tempo = Tempo;
         }
+
+        public override string ToString()
+        {
+            return string.Format("ID da Viagem: {0}, ID do cliente: {1}, ID do planeta de origem: {2}, ID do planeta de destino: {3}, "
+                + "ID do Transporte: {4}  Valor: {5} Tempo de Viagem: {6}", this._Id, this._IdCliente, this.IdPlanetaOrigem, this._IdPlanetaDestino,
+                this._IdTransporte, this._Valor, this._Tempo);
+        }
     }
 }

@@ -37,7 +37,7 @@ CREATE TABLE Viagem(
      IdPlanetaDestino	INT				NOT NULL,
      IdCliente			INT				NOT NULL,
 	 IdTransporte		INT				NOT NULL,
-     Valor				MONEY			NOT NULL,
+     Valor				DECIMAL(10, 2)	NOT NULL,
      Tempo				VARCHAR(200)	NOT NULL,
 	 PRIMARY KEY		(Id),
 	 FOREIGN KEY		(IdPlanetaOrigem)	REFERENCES Planeta (Id),
@@ -203,13 +203,13 @@ BEGIN
 END
 GO
 CREATE PROCEDURE viagem_spu(
+	@Id						INT,	
 	@IdPlanetaOrigem		INT,
 	@IdPlanetaDestino		INT,
 	@IdCliente				INT,
 	@IdTransporte			INT,
 	@Valor					MONEY,
-	@Tempo					VARCHAR(200),
-	@IdPlanetaParaTroca		INT
+	@Tempo					VARCHAR(200)
 )
 
 AS
@@ -224,14 +224,13 @@ BEGIN
 		Valor				=	@Valor,
 		Tempo				=	@Tempo
 	WHERE 
-		Id = @IdPlanetaParaTroca
+		Id = @Id
 
-	SELECT 'Viagem alterada com sucesso!' AS [Mensagem]
-	
+	SELECT 'Viagem alterada com sucesso!' AS [Mensagem]	
 END
 GO
 CREATE PROCEDURE viagem_sps(
-@Id INT
+	@Id INT
 )
 
 AS
@@ -252,13 +251,24 @@ SELECT
 		V.Id =  @Id 
 END
 GO
+CREATE PROCEDURE viagemTabela_sps(
+	@Id INT
+)
+AS
+BEGIN
+	SELECT 
+		* FROM Viagem
+	WHERE
+		Id = @Id 
+END
+GO
 CREATE PROCEDURE viagem_spd(
 	@Id INT
 )
 AS
-
 BEGIN
 	DELETE FROM Viagem WHERE Id = @Id
+	SELECT 'Viagem removida com sucesso' AS [Mensagem]
 END
 
 ---------------------------------------------------------------------------------------------------------------------------
@@ -275,26 +285,25 @@ BEGIN
 		INTO Transporte
 	VALUES
 		(@Nome, @Terreno)
-	SELECT 'Viagem alterada com sucesso!' AS [Mensagem]
+	SELECT 'Transporte criado com sucesso!' AS [Mensagem]
 
 END
 
 GO
 CREATE PROCEDURE transporte_spu(
+	@Id							INT,
 	@Nome						VARCHAR(200),
-	@Terreno					VARCHAR(200),
-	@NomeTransporteParaTroca	VARCHAR(200)
+	@Terreno					VARCHAR(200)
 )
-
 AS
-
 BEGIN
 	UPDATE Transporte
 	SET 
 		Nome		=	@Nome, 
 		Terreno		=	@Terreno
 	WHERE 
-		Nome = @NomeTransporteParaTroca
+		Id = @Id
+	SELECT 'Transporte alterado com sucesso!' AS [Mensagem]
 END
 GO
 CREATE PROCEDURE transporte_sps(
@@ -309,11 +318,11 @@ END
 
 GO
 CREATE PROCEDURE transporte_spd(
-	@Nome VARCHAR(200)
+	@Id INT
 )
 AS
 
 BEGIN
-	DELETE FROM Transporte WHERE Nome = @Nome
+	DELETE FROM Transporte WHERE Id = @Id
 END
 

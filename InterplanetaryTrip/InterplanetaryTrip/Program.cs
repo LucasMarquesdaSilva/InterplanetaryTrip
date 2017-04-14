@@ -48,46 +48,90 @@ namespace InterplanetaryTrip
 
         private static void navegarMenuExclusaoGeral()
         {
-            Console.WriteLine("Menu 4 - Excluir");
-            Console.WriteLine("-------------------------------------------------");
-            Console.WriteLine("1 - Excluir Planeta");
-            Console.WriteLine("2 - Excluir Cliente");
-            Console.WriteLine("3 - Excluir Transporte");
-            Console.WriteLine("4 - Excluir Viagem");
-            var RespostaUsuarioExcluir = Console.ReadLine();
-            if (RespostaUsuarioExcluir == "1")
+            var RespostaUsuarioExcluir = "";
+            do
             {
-                navegarRemocaoPlaneta();
-            }
-            else if (RespostaUsuarioExcluir == "2")
-            {
-                try
+                Console.WriteLine("Menu 4 - Excluir");
+                Console.WriteLine("-------------------------------------------------");
+                Console.WriteLine("1 - Excluir Planeta");
+                Console.WriteLine("2 - Excluir Cliente");
+                Console.WriteLine("3 - Excluir Transporte");
+                Console.WriteLine("4 - Excluir Viagem");
+                Console.WriteLine("5 - Voltar");
+                RespostaUsuarioExcluir = Console.ReadLine();
+                if (RespostaUsuarioExcluir == "1")
                 {
-                    Console.WriteLine("Digite o nome do cliente que voce deseja excluir:");
-                    var nomeCliente = Console.ReadLine();
-                    RepositorioCrud<Cliente> operacaoCliente = new RepositorioCrud<Cliente>();
-                    var clientes = operacaoCliente.Consultar("cliente_sps", nomeCliente, "@Nome");
-                    foreach (var cliente in clientes)
+                    navegarRemocaoPlaneta();
+                }
+                else if (RespostaUsuarioExcluir == "2")
+                {
+                    try
                     {
-                        Console.WriteLine(cliente.ToString());
+                        Console.WriteLine("Digite o nome do cliente que voce deseja excluir:");
+                        var nomeCliente = Console.ReadLine();
+                        RepositorioCrud<Cliente> operacaoCliente = new RepositorioCrud<Cliente>();
+                        var clientes = operacaoCliente.Consultar("cliente_sps", nomeCliente, "@Nome");
+                        foreach (var cliente in clientes)
+                        {
+                            Console.WriteLine(cliente.ToString());
+                        }
+                        Console.WriteLine("Informe o id do planeta para ser excluido: ");
+                        var idCliente = Console.ReadLine();
+                        operacaoCliente.Remover("cliente_spd", Convert.ToInt32(idCliente), "@id");
                     }
-                    Console.WriteLine("Informe o id do planeta para ser excluido: ");
-                    var idCliente = Console.ReadLine();
-                    operacaoCliente.Remover("cliente_spd", Convert.ToInt32(idCliente), "@id");
+                    catch
+                    {
+                        Console.WriteLine("Ops parece que existem dependencias com esse Cliente");
+                    }
                 }
-                catch (Exception e)
+                else if (RespostaUsuarioExcluir == "3")
                 {
-                    Console.WriteLine("Ops: {0}", e.Message);
+                    try
+                    {
+                        Console.WriteLine("Digite o nome do transporte que voce deseja excluir:");
+                        var nomeTransporte = Console.ReadLine();
+                        RepositorioCrud<Transporte> operacaoTransporte = new RepositorioCrud<Transporte>();
+                        var transportes = operacaoTransporte.Consultar("transporte_sps", nomeTransporte, "@Nome");
+                        foreach (var transporte in transportes)
+                        {
+                            Console.WriteLine(transporte.ToString());
+                        }
+                        Console.WriteLine("Informe o id do transporte para ser excluido: ");
+                        var idTransporte = Console.ReadLine();
+                        operacaoTransporte.Remover("transporte_spd", Convert.ToInt32(idTransporte), "@Id");
+                    }
+                    catch
+                    {
+                        Console.WriteLine("Ops parece que existem dependencias desse transporte");
+                    }
+
                 }
-            }
-            else if (RespostaUsuarioExcluir == "3")
-            {
-
-            }
-            else if (RespostaUsuarioExcluir == "4")
-            {
-
-            }
+                else if (RespostaUsuarioExcluir == "4")
+                {
+                    try
+                    {
+                        Console.WriteLine("Digite o id da viagem que voce deseja excluir:");
+                        var idViagem = Convert.ToInt32(Console.ReadLine());
+                        RepositorioCrud<Viagem> operacaoViagem = new RepositorioCrud<Viagem>();
+                        var viagens = operacaoViagem.Consultar("viagemTabela_sps", idViagem, "@Id");
+                        foreach (var viagem in viagens)
+                        {
+                            Console.WriteLine(viagem.ToString());
+                        }
+                        Console.WriteLine("Informe o id da viagem para confirmar a remoçao: ");
+                        idViagem = Convert.ToInt32(Console.ReadLine());
+                        operacaoViagem.Remover("viagem_spd", idViagem, "@Id");
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine("Ops: {0}", e.Message);
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Opção inválida! Tente novamente.");
+                }
+            } while (RespostaUsuarioExcluir != "5");
         }
 
         private static void navegarMenuAtualizacaoGeral()
@@ -111,21 +155,99 @@ namespace InterplanetaryTrip
                 }
                 else if (RespostaUsuarioAtualizacao == "2")
                 {
-                    navegarUsuarioAtualizacao();
+                    navegarClienteAtualizacao();
 
                 }
                 else if (RespostaUsuarioAtualizacao == "3")
                 {
-
+                    navegarTranposteAtualizacao();
                 }
                 else if (RespostaUsuarioAtualizacao == "4")
                 {
-
+                    navegarViagemAtualizacao();
+                }
+                else
+                {
+                    Console.WriteLine("Opção inválida! Tente novamente.");
                 }
             } while (RespostaUsuarioAtualizacao != "5");
         }
 
-        private static void navegarUsuarioAtualizacao()
+        private static void navegarTranposteAtualizacao()
+        {
+            Console.WriteLine("Digite o Nome do transporte para ser atualizado:");
+            var nomeTransporte = Console.ReadLine();
+            RepositorioCrud<Transporte> operacaoTransporte = new RepositorioCrud<Transporte>();
+            var transportes = operacaoTransporte.Consultar("transporte_sps", nomeTransporte, "@Nome");
+            foreach (var transporte in transportes)
+            {
+                Console.WriteLine(transporte.ToString());
+            }
+            Console.WriteLine("Digite o id do transporte para ser atualizado:");
+            var idTransporte = Convert.ToInt32(Console.ReadLine());
+            foreach (var transporte in transportes)
+            {
+                if (transporte.Id == idTransporte)
+                {
+                    Console.WriteLine("Nome Atual: {0}", transporte.Nome);
+                    Console.WriteLine("Nome para atualizar:");
+                    transporte.Nome = Console.ReadLine();
+                    Console.WriteLine("Terreno: {0}", transporte.Terreno);
+                    Console.WriteLine("Novo terreno:");
+                    transporte.Terreno = Console.ReadLine();
+                    operacaoTransporte.Alterar(transporte, "transporte_spu");
+                }
+                else
+                {
+                    Console.WriteLine("Não Existe transporte com esse nome!");
+                }
+            }
+        }
+
+        private static void navegarViagemAtualizacao()
+        {
+            Console.WriteLine("Digite o id da viagem para ser atualizada:");
+            var idViagem = Convert.ToInt32(Console.ReadLine());
+            RepositorioCrud<Viagem> operacaoViagem = new RepositorioCrud<Viagem>();
+            var viagens = operacaoViagem.Consultar("viagemTabela_sps", idViagem, "@Id");
+            foreach (var viagem in viagens)
+            {
+                Console.WriteLine(viagem.ToString());
+            }
+            Console.WriteLine("Digite o id da viagem para ser atualizada:");
+            idViagem = Convert.ToInt32(Console.ReadLine());
+            foreach (var viagem in viagens)
+            {
+                if (viagem.Id == idViagem)
+                {
+                    Console.WriteLine("Identificação do cliente atual: {0}", viagem.IdCliente);
+                    Console.WriteLine("Novo valor da Identificação do cliente para atualizar:");
+                    viagem.IdCliente = Convert.ToInt32(Console.ReadLine());
+                    Console.WriteLine("Identificação do planeta de Origem: {0}", viagem.IdPlanetaOrigem);
+                    Console.WriteLine("Identificação do novo planeta de origem:");
+                    viagem.IdPlanetaOrigem = Convert.ToInt32(Console.ReadLine());
+                    Console.WriteLine("Identificação do planeta de Destino: {0}", viagem.IdPlanetaDestino);
+                    Console.WriteLine("Identificação do novo planeta de Destino:");
+                    viagem.IdPlanetaDestino = Convert.ToInt32(Console.ReadLine());
+                    Console.WriteLine("Identificação do Transporte: {0}", viagem.IdTransporte);
+                    Console.WriteLine("Identificação do novo Transporte:");
+                    viagem.IdTransporte = Convert.ToInt32(Console.ReadLine());
+                    Console.WriteLine("Valor da viagem atual: {0}", viagem.valor);
+                    Console.WriteLine("Novo valor:");
+                    viagem.valor = Convert.ToDecimal(Console.ReadLine());
+                    Console.WriteLine("Tempo de viagem atual: {0}", viagem.Tempo);
+                    Console.WriteLine("Novo Tempo de duração da viagem:");
+                    viagem.Tempo = Console.ReadLine();
+                    operacaoViagem.Alterar(viagem, "viagem_spu");
+                }
+                else
+                {
+                    Console.WriteLine("Não Existe viagem com esse ID!");
+                }
+            }
+        }
+
+        private static void navegarClienteAtualizacao()
         {
             Console.WriteLine("Digite o Nome do Cliente para ser atualizado:");
             var nomeCliente = Console.ReadLine();
@@ -212,13 +334,20 @@ namespace InterplanetaryTrip
                 var nomePlaneta = Console.ReadLine();
                 RepositorioCrud<Planeta> operacaoPlaneta = new RepositorioCrud<Planeta>();
                 var planetas = operacaoPlaneta.Consultar("planeta_sps", nomePlaneta, "@Nome");
-                foreach (var item in planetas)
+                if (planetas.Count == 0)
                 {
-                    Console.WriteLine(item.ToString());
+                    Console.WriteLine("Parece que não existe um planeta com esse nome: ");
                 }
-                Console.WriteLine("Informe o id do planeta para ser excluido: ");
-                var idPlaneta = Console.ReadLine();
-                operacaoPlaneta.Remover("planeta_spd", Convert.ToInt32(idPlaneta), "@id");
+                else
+                {
+                    foreach (var item in planetas)
+                    {
+                        Console.WriteLine(item.ToString());
+                    }
+                    Console.WriteLine("Informe o id do planeta para ser excluido: ");
+                    var idPlaneta = Console.ReadLine();
+                    operacaoPlaneta.Remover("planeta_spd", Convert.ToInt32(idPlaneta), "@id");
+                }
             }
             catch (Exception e)
             {
@@ -254,6 +383,10 @@ namespace InterplanetaryTrip
                 else if (RespostaUsuarioConsulta == "4")
                 {
                     navegarConsultaViagem();
+                }
+                else
+                {
+                    Console.WriteLine("Opção inválida! Tente novamente.");
                 }
             } while (RespostaUsuarioConsulta != "5");
         }
@@ -370,6 +503,10 @@ namespace InterplanetaryTrip
                 {
                     navegarCadastroViagem();
 
+                }
+                else
+                {
+                    Console.WriteLine("Opção inválida! Tente novamente.");
                 }
             } while (respostaUsuarioCadastro != "5");
 
