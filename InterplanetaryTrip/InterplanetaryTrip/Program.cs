@@ -99,7 +99,7 @@ namespace InterplanetaryTrip
                 var idCliente = Console.ReadLine();
                 operacaoCliente.Remover("cliente_spd", Convert.ToInt32(idCliente), "@id");
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 LogError(e);
 
@@ -401,16 +401,21 @@ namespace InterplanetaryTrip
 
         private static void LogError(Exception e)
         {
-            string raiz = @"c:\temp";
-            string pasta = "erros";
-            pasta = Path.Combine(raiz, pasta);
+            string pasta = @"c:\temp\erros";
             if (!Directory.Exists(pasta))
             {
                 Directory.CreateDirectory(pasta);
             }
 
             string arquivo = Path.Combine(pasta, "Erro_" + DateTime.Now.Date + ".txt");
-            File.AppendAllText(arquivo, "\r\nErro: " + e.Message);
+            if (File.Exists(arquivo))
+            {
+                File.AppendAllText(arquivo, "Erro: " + e.Message);
+            }else
+            {
+                File.WriteAllText(arquivo, "Erro: " + Convert.ToString(e.Message));
+
+            }
 
         }
 
@@ -597,6 +602,29 @@ namespace InterplanetaryTrip
                     Convert.ToInt32(idCliente), Convert.ToInt32(idTransporte), Convert.ToDecimal(valor), tempo);
                 var repositorioViagem = new RepositorioCrud<Viagem>();
                 repositorioViagem.Cadastrar(viagem, "viagem_spi");
+                var consultarCliente = new RepositorioCrud<Cliente>();
+                var clientes = consultarCliente.Consultar("cliente_spsid", viagem.IdCliente, "@Id");
+                string raiz = @"c:\temp\clientes";
+                foreach (var cliente in clientes)
+                {
+                    if (viagem.IdCliente == cliente.Id)
+                    {
+                        string pasta = Path.Combine(raiz, cliente.Nome + "_" + cliente.Id);
+                        if (!Directory.Exists(pasta))
+                        {
+                            Directory.CreateDirectory(pasta);
+                        }
+                        var repositorioConsultaViagem = new RepositorioCrud<ViagemConsulta>();
+                        var dadosViagem = repositorioConsultaViagem.Consultar("viagemTabelaCliente_sps", viagem.IdCliente, "@IdCliente");
+                        foreach (var itemViagem in dadosViagem)
+                        {
+                            string arquivo = Path.Combine(pasta, "Ticket_"+ itemViagem.Id + "_" + DateTime.Now.Date + ".txt");
+                            string mensagem = itemViagem.ToString();
+                            File.WriteAllText(pasta, mensagem);
+                        }
+                    }
+                }
+
             }
             catch (Exception e)
             {
@@ -666,7 +694,7 @@ namespace InterplanetaryTrip
                 string pasta = "";
                 foreach (var item in clienteLogConsulta)
                 {
-                    if(item.Nome == cliente.Nome)
+                    if (item.Nome == cliente.Nome)
                     {
                         pasta = Path.Combine(raiz, item.Nome + "_" + item.Id);
                         if (!Directory.Exists(pasta))
@@ -693,16 +721,7 @@ namespace InterplanetaryTrip
             Console.WriteLine("Descrição do Planeta:");
             var DescricaoPlaneta = Console.ReadLine();
             Console.WriteLine("Possui Oxigênio?");
-            var RespostaPossuiOxigenio = Console.ReadLine().ToLower();
-            var PossuiOxigenio = true;
-            if (RespostaPossuiOxigenio == "Sim")
-            {
-                PossuiOxigenio = true;
-            }
-            else if (RespostaPossuiOxigenio == "não" || RespostaPossuiOxigenio == "nao")
-            {
-                PossuiOxigenio = false;
-            }
+            var PossuiOxigenio = Console.ReadLine().ToLower() == "Sim" ? true : false;
             try
             {
                 Planeta Planeta = new Planeta(NomePlaneta, DescricaoPlaneta, PossuiOxigenio);

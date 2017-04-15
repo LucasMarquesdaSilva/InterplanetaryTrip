@@ -111,6 +111,16 @@ BEGIN
 	SELECT * FROM Cliente WHERE(Nome LIKE '%' + @Nome + '%')
 END
 GO
+CREATE PROCEDURE cliente_spsid(
+	@Id INT
+)
+
+AS
+
+BEGIN
+	SELECT * FROM Cliente WHERE Id = @Id
+END
+GO
 CREATE PROCEDURE cliente_spd(
 	@Id INT
 )
@@ -262,6 +272,17 @@ BEGIN
 		Id = @Id 
 END
 GO
+CREATE PROCEDURE viagemTabelaCliente_sps(
+	@IdCliente INT
+)
+AS
+BEGIN
+	SELECT 
+		* FROM Viagem
+	WHERE
+		IdCliente = @IdCliente 
+END
+GO
 CREATE PROCEDURE viagem_spd(
 	@Id INT
 )
@@ -326,3 +347,4 @@ BEGIN
 	DELETE FROM Transporte WHERE Id = @Id
 END
 
+select * from Transporte
