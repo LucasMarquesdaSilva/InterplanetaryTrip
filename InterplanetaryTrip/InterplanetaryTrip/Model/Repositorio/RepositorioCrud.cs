@@ -42,7 +42,6 @@ namespace InterplanetaryTrip.Model.Repositorio
                 if (propriedade.Name.ToLower() != "id")
                 {
                     lista.Add(new SqlParameter("@" + propriedade.Name, propriedade.GetValue(entidade)));
-                    Console.WriteLine(propriedade.ToString());
                 }
             };
             SqlDataReader reader = _database.Consulta(procedure, lista);
