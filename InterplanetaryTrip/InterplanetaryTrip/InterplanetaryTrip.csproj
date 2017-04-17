@@ -56,11 +56,7 @@
     <Compile Include="Model\Interfaces\ICrudBase.cs" />
     <Compile Include="Model\Interfaces\IPlaneta.cs" />
     <Compile Include="Model\Interfaces\ITranporte.cs" />
-    <Compile Include="Model\Repositorio\RepositorioCliente.cs" />
     <Compile Include="Model\Repositorio\RepositorioCrud.cs" />
-    <Compile Include="Model\Repositorio\RepositorioPlaneta.cs" />
-    <Compile Include="Model\Repositorio\RepositorioTransporte.cs" />
-    <Compile Include="Model\Repositorio\RepositorioViagem.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

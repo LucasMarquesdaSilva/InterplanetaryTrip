@@ -60,9 +60,7 @@ CREATE PROCEDURE cliente_spi(
 	@QtdCabeca		INT,
 	@Respira		BIT
 )
-
 AS
-
 BEGIN
 	INSERT  
 		INTO Cliente
@@ -83,7 +81,6 @@ CREATE PROCEDURE cliente_spu(
 	@Respira		BIT,
 	@NomeParaTroca	VARCHAR(200)
 )
-
 AS
 BEGIN
 	UPDATE Cliente
@@ -104,9 +101,7 @@ GO
 CREATE PROCEDURE cliente_sps(
 	@Nome VARCHAR(200)
 )
-
 AS
-
 BEGIN
 	SELECT * FROM Cliente WHERE(Nome LIKE '%' + @Nome + '%')
 END
@@ -114,9 +109,7 @@ GO
 CREATE PROCEDURE cliente_spsid(
 	@Id INT
 )
-
 AS
-
 BEGIN
 	SELECT * FROM Cliente WHERE Id = @Id
 END
@@ -125,11 +118,9 @@ CREATE PROCEDURE cliente_spd(
 	@Id INT
 )
 AS
-
 BEGIN
 	DELETE FROM Cliente WHERE id = @Id
 	SELECT 'Cliente  deletado com sucesso!' AS [Mensagem]
-
 END
 
 ---------------------------------------------------------------------------------------------------------------------------
@@ -139,7 +130,6 @@ CREATE PROCEDURE planeta_spi(
 	@Descricao	VARCHAR(200),
 	@PossuiOxigenio	BIT
 )
-
 AS
 BEGIN
 	INSERT  
@@ -148,17 +138,14 @@ BEGIN
 		(@Nome, @Descricao, @PossuiOxigenio)
 	SELECT 'Cadastro Realizado com sucesso!' AS [Mensagem]
 END
-
 GO
 CREATE PROCEDURE planeta_spu(
-	@Id INT,
-	@Nome VARCHAR(200),
-	@Descricao VARCHAR(200),
+	@Id				INT,
+	@Nome			VARCHAR(200),
+	@Descricao		VARCHAR(200),
 	@PossuiOxigenio	BIT
 )
-
 AS
-
 BEGIN
 	UPDATE Planeta
 	SET 
@@ -177,18 +164,14 @@ AS
 BEGIN
 	SELECT * FROM Planeta WHERE(Nome LIKE '%' + @Nome + '%')
 END
-
 GO
 CREATE PROCEDURE planeta_spd(
 	@id INT
 )
-
 AS
 BEGIN
 	DELETE FROM Planeta WHERE Id = @id
-
 	SELECT ('Planeta deletado com sucesso!') AS [Mensagem]
-
 END
 
 ---------------------------------------------------------------------------------------------------------------------------
@@ -201,7 +184,6 @@ CREATE PROCEDURE viagem_spi(
 	@Valor				MONEY,
 	@Tempo				VARCHAR(200)
 )
-
 AS
 BEGIN
 	INSERT  
@@ -221,9 +203,7 @@ CREATE PROCEDURE viagem_spu(
 	@Valor					MONEY,
 	@Tempo					VARCHAR(200)
 )
-
 AS
-
 BEGIN
 	UPDATE Viagem
 	SET 
@@ -242,10 +222,8 @@ GO
 CREATE PROCEDURE viagem_sps(
 	@Id INT
 )
-
 AS
 BEGIN
-
 SELECT 
 		V.Id, C.Nome AS nomeCliente, C.Documento,
 		C.Respira, PO.Nome as NomePlanetaOrigem,
@@ -277,11 +255,20 @@ CREATE PROCEDURE viagemTabelaCliente_sps(
 )
 AS
 BEGIN
-	SELECT 
-		* FROM Viagem
-	WHERE
-		IdCliente = @IdCliente 
-END
+SELECT 
+		V.Id, C.Nome AS nomeCliente, C.Documento,
+		C.Respira, PO.Nome as NomePlanetaOrigem,
+		PD.Nome as NomePlanetaDestino,  
+		V.Valor, V.Tempo, T.Nome  as TransporteNome, T.Terreno
+	FROM
+		Cliente C
+		join Viagem V on V.IdCliente = C.Id
+		join Transporte T on T.Id = V.IdTransporte
+		join Planeta PO on PO.Id = V.IdPlanetaOrigem
+		join Planeta PD on PD.Id = V.IdPlanetaDestino
+	WHERE 
+		V.IdCliente =  @IdCliente 
+END 
 GO
 CREATE PROCEDURE viagem_spd(
 	@Id INT
@@ -298,18 +285,14 @@ CREATE PROCEDURE transporte_spi(
 	@Nome		VARCHAR(200),
 	@Terreno	VARCHAR(200)
 )
-
 AS
-
 BEGIN
 	INSERT  
 		INTO Transporte
 	VALUES
 		(@Nome, @Terreno)
 	SELECT 'Transporte criado com sucesso!' AS [Mensagem]
-
 END
-
 GO
 CREATE PROCEDURE transporte_spu(
 	@Id							INT,
@@ -330,21 +313,15 @@ GO
 CREATE PROCEDURE transporte_sps(
 	@Nome VARCHAR(200)
 )
-
 AS
-
 BEGIN
 	SELECT * FROM Transporte  WHERE(Nome LIKE '%' + @Nome + '%')
 END
-
 GO
 CREATE PROCEDURE transporte_spd(
 	@Id INT
 )
 AS
-
 BEGIN
 	DELETE FROM Transporte WHERE Id = @Id
 END
-
-select * from Transporte

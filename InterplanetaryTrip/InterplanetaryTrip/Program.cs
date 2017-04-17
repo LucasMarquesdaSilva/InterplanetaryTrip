@@ -407,13 +407,17 @@ namespace InterplanetaryTrip
                 Directory.CreateDirectory(pasta);
             }
 
-            string arquivo = Path.Combine(pasta, "Erro_" + DateTime.Now.Date + ".txt");
+
+            string arquivo = Path.Combine(pasta, "Erro_"+ DateTime.Now.Date.ToString() + ".txt");
             if (File.Exists(arquivo))
             {
-                File.AppendAllText(arquivo, "Erro: " + e.Message);
-            }else
+                File.AppendAllText(arquivo, "\r\nErro: " + e.Message);
+                File.AppendAllText(arquivo, "\r\nErro: " + e.StackTrace);
+            }
+            else
             {
-                File.WriteAllText(arquivo, "Erro: " + Convert.ToString(e.Message));
+                File.WriteAllText(arquivo, "Erro: " + e.Message);
+                File.AppendAllText(arquivo, "\r\nErro: " + e.StackTrace);
 
             }
 
@@ -618,9 +622,9 @@ namespace InterplanetaryTrip
                         var dadosViagem = repositorioConsultaViagem.Consultar("viagemTabelaCliente_sps", viagem.IdCliente, "@IdCliente");
                         foreach (var itemViagem in dadosViagem)
                         {
-                            string arquivo = Path.Combine(pasta, "Ticket_"+ itemViagem.Id + "_" + DateTime.Now.Date + ".txt");
+                            string arquivo = Path.Combine(pasta, "Ticket_"+ itemViagem.Id  + ".txt");
                             string mensagem = itemViagem.ToString();
-                            File.WriteAllText(pasta, mensagem);
+                            File.WriteAllText(arquivo, mensagem);
                         }
                     }
                 }
