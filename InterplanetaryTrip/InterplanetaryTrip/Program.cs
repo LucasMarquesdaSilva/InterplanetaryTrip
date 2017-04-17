@@ -407,8 +407,8 @@ namespace InterplanetaryTrip
                 Directory.CreateDirectory(pasta);
             }
 
-
-            string arquivo = Path.Combine(pasta, "Erro_"+ DateTime.Now.Date.ToString() + ".txt");
+            DateTime day = DateTime.Now;
+            string arquivo = Path.Combine(pasta, "Erro_" + string.Format("{0:dd-MM-yyyy}", day) + ".txt");
             if (File.Exists(arquivo))
             {
                 File.AppendAllText(arquivo, "\r\nErro: " + e.Message);
@@ -463,13 +463,22 @@ namespace InterplanetaryTrip
         {
             try
             {
-                Console.WriteLine("Qual o id da viagem que você deseja consultar?");
-                var respostaConsultaViagem = Console.ReadLine();
-                RepositorioCrud<ViagemConsulta> consultaCliente = new RepositorioCrud<ViagemConsulta>();
-                var viagens = consultaCliente.Consultar("viagem_sps", Convert.ToInt32(respostaConsultaViagem), "@Id");
-                foreach (var item in viagens)
+                Console.WriteLine("1 - Consulta específica");
+                Console.WriteLine("2 - Consultar todas as viagens de um cliente");
+                var respostaConsulta = Console.ReadLine();
+                if (respostaConsulta == "1")
                 {
-                    Console.WriteLine(item.ToString());
+                    Console.WriteLine("Qual o id da viagem que você deseja consultar?");
+                    var respostaConsultaViagem = Console.ReadLine();
+                    RepositorioCrud<ViagemConsulta> consultaCliente = new RepositorioCrud<ViagemConsulta>();
+                    var viagens = consultaCliente.Consultar("viagem_sps", Convert.ToInt32(respostaConsultaViagem), "@Id");
+                    foreach (var item in viagens)
+                    {
+                        Console.WriteLine(item.ToString());
+                    }
+                }else if(respostaConsulta == "2")
+                {
+
                 }
             }
             catch (Exception e)
@@ -609,6 +618,7 @@ namespace InterplanetaryTrip
                 var consultarCliente = new RepositorioCrud<Cliente>();
                 var clientes = consultarCliente.Consultar("cliente_spsid", viagem.IdCliente, "@Id");
                 string raiz = @"c:\temp\clientes";
+                DateTime day = DateTime.Now;
                 foreach (var cliente in clientes)
                 {
                     if (viagem.IdCliente == cliente.Id)
@@ -622,7 +632,7 @@ namespace InterplanetaryTrip
                         var dadosViagem = repositorioConsultaViagem.Consultar("viagemTabelaCliente_sps", viagem.IdCliente, "@IdCliente");
                         foreach (var itemViagem in dadosViagem)
                         {
-                            string arquivo = Path.Combine(pasta, "Ticket_"+ itemViagem.Id  + ".txt");
+                            string arquivo = Path.Combine(pasta, "Ticket_" + itemViagem.Id + "_" + string.Format("{0:dd-MM-yyyy}", day) + ".txt");
                             string mensagem = itemViagem.ToString();
                             File.WriteAllText(arquivo, mensagem);
                         }
