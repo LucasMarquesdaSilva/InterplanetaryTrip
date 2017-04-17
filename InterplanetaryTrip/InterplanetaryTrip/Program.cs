@@ -46,81 +46,92 @@ namespace InterplanetaryTrip
 
             } while (RespostaUsuario != "5");
         }
-
-        private static void navegarMenuExclusaoGeral()
+        private static void navegarMenuCadastroGeral()
         {
-            var RespostaUsuarioExcluir = "";
+            var respostaUsuarioCadastro = "";
             do
             {
-                Console.WriteLine("Menu 4 - Excluir");
+                Console.WriteLine("Menu 1 - Cadastro");
                 Console.WriteLine("-------------------------------------------------");
-                Console.WriteLine("1 - Excluir Planeta");
-                Console.WriteLine("2 - Excluir Cliente");
-                Console.WriteLine("3 - Excluir Transporte");
-                Console.WriteLine("4 - Excluir Viagem");
+                Console.WriteLine("1 - Cadastrar Planeta");
+                Console.WriteLine("2 - Cadastrar Cliente");
+                Console.WriteLine("3 - Cadastrar Transporte");
+                Console.WriteLine("4 - Cadastrar Viagem");
                 Console.WriteLine("5 - Voltar");
-                RespostaUsuarioExcluir = Console.ReadLine();
-                if (RespostaUsuarioExcluir == "1")
+                respostaUsuarioCadastro = Console.ReadLine();
+                if (respostaUsuarioCadastro == "1")
                 {
-                    navegarPlanetaRemocao();
+                    navegarCadastroPlaneta();
+
                 }
-                else if (RespostaUsuarioExcluir == "2")
+                else if (respostaUsuarioCadastro == "2")
                 {
-                    navegarClienteRemocao();
+                    navegarCadastroCliente();
                 }
-                else if (RespostaUsuarioExcluir == "3")
+                else if (respostaUsuarioCadastro == "3")
                 {
-                    navegarTransporteRemocao();
+                    navegarCadastroTransporte();
+
                 }
-                else if (RespostaUsuarioExcluir == "4")
+                else if (respostaUsuarioCadastro == "4")
                 {
-                    navegarViagemRemocao();
+                    navegarCadastroViagem();
+
                 }
                 else
                 {
                     Console.WriteLine("Opção inválida! Tente novamente.");
                 }
-            } while (RespostaUsuarioExcluir != "5");
+            } while (respostaUsuarioCadastro != "5");
+
         }
 
-        private static void navegarClienteRemocao()
+        private static void navegarCadastroViagem()
         {
+            Console.WriteLine("Cadastro de Viagem");
+            Console.WriteLine("---------------------");
+            Console.WriteLine("Id Planeta origem:");
+            var idPlanetaOrigem = Console.ReadLine();
+            Console.WriteLine("Id Planeta destino:");
+            var idPlanetaDestino = Console.ReadLine();
+            Console.WriteLine("Id Cliente:");
+            var idCliente = Console.ReadLine();
+            Console.WriteLine("Id Transporte:");
+            var idTransporte = Console.ReadLine();
+            Console.WriteLine("Valor: R$");
+            var valor = Console.ReadLine();
+            Console.WriteLine("Tempo:");
+            var tempo = Console.ReadLine();
             try
             {
-                Console.WriteLine("Digite o nome do cliente que voce deseja excluir:");
-                var nomeCliente = Console.ReadLine();
-                RepositorioCrud<Cliente> operacaoCliente = new RepositorioCrud<Cliente>();
-                var clientes = operacaoCliente.Consultar("cliente_sps", nomeCliente, "@Nome");
+                Viagem viagem = new Viagem(Convert.ToInt32(idPlanetaOrigem), Convert.ToInt32(idPlanetaDestino),
+                    Convert.ToInt32(idCliente), Convert.ToInt32(idTransporte), Convert.ToDecimal(valor), tempo);
+                var repositorioViagem = new RepositorioCrud<Viagem>();
+                repositorioViagem.Cadastrar(viagem, "viagem_spi");
+                var consultarCliente = new RepositorioCrud<Cliente>();
+                var clientes = consultarCliente.Consultar("cliente_spsid", viagem.IdCliente, "@Id");
+                string raiz = @"c:\temp\clientes";
+                DateTime day = DateTime.Now;
                 foreach (var cliente in clientes)
                 {
-                    Console.WriteLine(cliente.ToString());
+                    if (viagem.IdCliente == cliente.Id)
+                    {
+                        string pasta = Path.Combine(raiz, cliente.Nome + "_" + cliente.Id);
+                        if (!Directory.Exists(pasta))
+                        {
+                            Directory.CreateDirectory(pasta);
+                        }
+                        var repositorioConsultaViagem = new RepositorioCrud<ViagemConsulta>();
+                        var dadosViagem = repositorioConsultaViagem.Consultar("viagemTabelaCliente_sps", viagem.IdCliente, "@IdCliente");
+                        foreach (var itemViagem in dadosViagem)
+                        {
+                            string arquivo = Path.Combine(pasta, "Ticket_" + itemViagem.Id + "_" + string.Format("{0:dd-MM-yyyy}", day) + ".txt");
+                            string mensagem = itemViagem.ToString();
+                            File.WriteAllText(arquivo, mensagem);
+                        }
+                    }
                 }
-                Console.WriteLine("Informe o id do planeta para ser excluido: ");
-                var idCliente = Console.ReadLine();
-                operacaoCliente.Remover("cliente_spd", Convert.ToInt32(idCliente), "@id");
-            }
-            catch (Exception e)
-            {
-                LogError(e);
 
-            }
-        }
-
-        private static void navegarViagemRemocao()
-        {
-            try
-            {
-                Console.WriteLine("Digite o id da viagem que voce deseja excluir:");
-                var idViagem = Convert.ToInt32(Console.ReadLine());
-                RepositorioCrud<Viagem> operacaoViagem = new RepositorioCrud<Viagem>();
-                var viagens = operacaoViagem.Consultar("viagemTabela_sps", idViagem, "@Id");
-                foreach (var viagem in viagens)
-                {
-                    Console.WriteLine(viagem.ToString());
-                }
-                Console.WriteLine("Informe o id da viagem para confirmar a remoçao: ");
-                idViagem = Convert.ToInt32(Console.ReadLine());
-                operacaoViagem.Remover("viagem_spd", idViagem, "@Id");
             }
             catch (Exception e)
             {
@@ -128,25 +139,254 @@ namespace InterplanetaryTrip
             }
         }
 
-        private static void navegarTransporteRemocao()
+        private static void navegarCadastroTransporte()
         {
             try
             {
-                Console.WriteLine("Digite o nome do transporte que voce deseja excluir:");
+                Console.WriteLine("Cadastro de Transporte");
+                Console.WriteLine("---------------------");
+                Console.WriteLine("Nome do transporte:");
                 var nomeTransporte = Console.ReadLine();
-                RepositorioCrud<Transporte> operacaoTransporte = new RepositorioCrud<Transporte>();
-                var transportes = operacaoTransporte.Consultar("transporte_sps", nomeTransporte, "@Nome");
-                foreach (var transporte in transportes)
-                {
-                    Console.WriteLine(transporte.ToString());
-                }
-                Console.WriteLine("Informe o id do transporte para ser excluido: ");
-                var idTransporte = Console.ReadLine();
-                operacaoTransporte.Remover("transporte_spd", Convert.ToInt32(idTransporte), "@Id");
+                Console.WriteLine("Terreno(AR/ TERRA/ MAR/ TELETRANSPORTE):");
+                var terreno = Console.ReadLine();
+                Transporte transporte = new Transporte(nomeTransporte, terreno);
+                var repositorioTransporte = new RepositorioCrud<Transporte>();
+                repositorioTransporte.Cadastrar(transporte, "transporte_spi");
             }
             catch (Exception e)
             {
                 LogError(e);
+            }
+        }
+
+        private static void navegarCadastroCliente()
+        {
+            Console.WriteLine("Cadastro de Cliente");
+            Console.WriteLine("---------------------");
+            Console.WriteLine("Nome Completo:");
+            var Nome = Console.ReadLine();
+            Console.WriteLine("Número do Documento:");
+            var Documento = Console.ReadLine();
+            Console.WriteLine("Tipo da éspecie:");
+            var TipoEspecie = Console.ReadLine();
+            Console.WriteLine("Cor:");
+            var Cor = Console.ReadLine();
+            Console.WriteLine("Quantidade de Braços:");
+            var QtdBracos = Console.ReadLine();
+            Console.WriteLine("Quantidade de Pernas:");
+            var QtdPernas = Console.ReadLine();
+            Console.WriteLine("Quantidade de Cabeça:");
+            var QtdCabeca = Console.ReadLine();
+            Console.WriteLine("Você respira?");
+            var Respira = Console.ReadLine().ToLower();
+            var RespostaRespira = true;
+
+            if (Respira == "sim")
+            {
+                RespostaRespira = true;
+            }
+            else
+            {
+                RespostaRespira = false;
+            }
+
+            try
+            {
+                Cliente cliente = new Cliente(Nome, Documento, TipoEspecie, Cor, Convert.ToInt32(QtdBracos), Convert.ToInt32(QtdPernas), Convert.ToInt32(QtdCabeca), RespostaRespira);
+                RepositorioCrud<Cliente> repositorioCliente = new RepositorioCrud<Cliente>();
+
+                repositorioCliente.Cadastrar(cliente, "cliente_spi");
+                var clienteLogConsulta = repositorioCliente.Consultar("cliente_sps", cliente.Nome, "@Nome");
+                string raiz = @"c:\temp\clientes";
+                string pasta = "";
+                foreach (var item in clienteLogConsulta)
+                {
+                    if (item.Nome == cliente.Nome)
+                    {
+                        pasta = Path.Combine(raiz, item.Nome + "_" + item.Id);
+                        if (!Directory.Exists(pasta))
+                        {
+                            Directory.CreateDirectory(pasta);
+                        }
+                    }
+                }
+
+            }
+            catch (Exception e)
+            {
+                LogError(e);
+
+            }
+        }
+
+        private static void navegarCadastroPlaneta()
+        {
+            Console.WriteLine("Cadastro de Planeta");
+            Console.WriteLine("---------------------");
+            Console.WriteLine("Nome do Planeta:");
+            var NomePlaneta = Console.ReadLine();
+            Console.WriteLine("Descrição do Planeta:");
+            var DescricaoPlaneta = Console.ReadLine();
+            Console.WriteLine("Possui Oxigênio?");
+            var PossuiOxigenio = Console.ReadLine().ToLower() == "Sim" ? true : false;
+            try
+            {
+                Planeta Planeta = new Planeta(NomePlaneta, DescricaoPlaneta, PossuiOxigenio);
+                var RepositorioPlaneta = new RepositorioCrud<Planeta>();
+                RepositorioPlaneta.Cadastrar(Planeta, "planeta_spi");
+            }
+            catch (Exception e)
+            {
+                LogError(e);
+
+            }
+        }
+        private static void navegarMenuConsultaGeral()
+        {
+            var RespostaUsuarioConsulta = "";
+            do
+            {
+                Console.WriteLine("Menu 2 - Consulta");
+                Console.WriteLine("-------------------------------------------------");
+                Console.WriteLine("1 - Consultar Planeta");
+                Console.WriteLine("2 - Consultar Cliente");
+                Console.WriteLine("3 - Consultar Transporte");
+                Console.WriteLine("4 - Consultar Viagem");
+                Console.WriteLine("5 - Voltar");
+                RespostaUsuarioConsulta = Console.ReadLine();
+                if (RespostaUsuarioConsulta == "1")
+                {
+                    navegarConsultaPlaneta();
+                }
+                else if (RespostaUsuarioConsulta == "2")
+                {
+                    navegarConsultaCliente();
+                }
+                else if (RespostaUsuarioConsulta == "3")
+                {
+                    navegarConsultaTransporte();
+                }
+                else if (RespostaUsuarioConsulta == "4")
+                {
+                    navegarConsultaViagem();
+                }
+                else
+                {
+                    Console.WriteLine("Opção inválida! Tente novamente.");
+                }
+            } while (RespostaUsuarioConsulta != "5");
+        }
+
+        private static void navegarConsultaViagem()
+        {
+            try
+            {
+                Console.WriteLine("1 - Consulta específica");
+                Console.WriteLine("2 - Consultar todas as viagens de um cliente");
+                var respostaConsulta = Console.ReadLine();
+                if (respostaConsulta == "1")
+                {
+                    Console.WriteLine("Qual o id da viagem que você deseja consultar?");
+                    var respostaConsultaViagem = Console.ReadLine();
+                    RepositorioCrud<ViagemConsulta> consultaCliente = new RepositorioCrud<ViagemConsulta>();
+                    var viagens = consultaCliente.Consultar("viagem_sps", Convert.ToInt32(respostaConsultaViagem), "@Id");
+                    foreach (var item in viagens)
+                    {
+                        Console.WriteLine(item.ToString());
+                    }
+                }
+                else if (respostaConsulta == "2")
+                {
+                    Console.WriteLine("Qual o nome do cliente?");
+                    var nomeCliente = Console.ReadLine();
+                    Console.WriteLine("Qual o id do cliente?");
+                    var idCliente = Convert.ToInt32(Console.ReadLine());
+                    var pasta = @"c:\temp\clientes\" + nomeCliente + "_" + idCliente;
+                    if (Directory.Exists(pasta))
+                    {
+                        var viagens = Directory.GetFiles(pasta);
+                        foreach (var viagem in viagens)
+                        {
+                            StreamReader conteudoArquivo = new StreamReader(viagem);
+                            string conteudoViagem = conteudoArquivo.ReadToEnd();
+                            Console.WriteLine(conteudoViagem);
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("Você digitou alguma informação errada!");
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                LogError(e);
+
+            }
+        }
+
+        private static void navegarConsultaTransporte()
+        {
+            try
+            {
+                Console.WriteLine("Qual o nome do transporte que você deseja consultar?");
+                var respostaConsultaTransporte = Console.ReadLine();
+                RepositorioCrud<Transporte> consultaCliente = new RepositorioCrud<Transporte>();
+                var transportes = consultaCliente.Consultar("transporte_sps", respostaConsultaTransporte, "@Nome");
+                foreach (var item in transportes)
+                {
+                    Console.WriteLine(item.ToString());
+
+                }
+            }
+            catch (Exception e)
+            {
+                LogError(e);
+
+            }
+        }
+
+        private static void navegarConsultaCliente()
+        {
+            try
+            {
+                Console.WriteLine("Qual o nome do cliente que você deseja consultar?");
+                var respostaConsultaCliente = Console.ReadLine();
+                RepositorioCrud<Cliente> consultaCliente = new RepositorioCrud<Cliente>();
+                var clientes = consultaCliente.Consultar("cliente_sps", respostaConsultaCliente, "@Nome");
+                foreach (var item in clientes)
+                {
+                    Console.WriteLine(item.ToString());
+
+                }
+            }
+            catch (Exception e)
+            {
+                LogError(e);
+
+            }
+        }
+
+        private static void navegarConsultaPlaneta()
+        {
+            try
+            {
+                Console.WriteLine("Qual o nome do planeta voce deseja consultar?");
+                var respostaConsultaPlaneta = Console.ReadLine();
+                RepositorioCrud<Planeta> consultaPlaneta = new RepositorioCrud<Planeta>();
+                var planetas = consultaPlaneta.Consultar("planeta_sps", respostaConsultaPlaneta, "@Nome");
+                if (planetas.Count == 0)
+                    Console.WriteLine("Não existe um planeta com o nome {0}", respostaConsultaPlaneta);
+                foreach (var item in planetas)
+                {
+                    Console.WriteLine(item.ToString());
+
+                }
+            }
+            catch (Exception e)
+            {
+                LogError(e);
+
             }
         }
 
@@ -370,6 +610,42 @@ namespace InterplanetaryTrip
             }
         }
 
+        private static void navegarMenuExclusaoGeral()
+        {
+            var RespostaUsuarioExcluir = "";
+            do
+            {
+                Console.WriteLine("Menu 4 - Excluir");
+                Console.WriteLine("-------------------------------------------------");
+                Console.WriteLine("1 - Excluir Planeta");
+                Console.WriteLine("2 - Excluir Cliente");
+                Console.WriteLine("3 - Excluir Transporte");
+                Console.WriteLine("4 - Excluir Viagem");
+                Console.WriteLine("5 - Voltar");
+                RespostaUsuarioExcluir = Console.ReadLine();
+                if (RespostaUsuarioExcluir == "1")
+                {
+                    navegarPlanetaRemocao();
+                }
+                else if (RespostaUsuarioExcluir == "2")
+                {
+                    navegarClienteRemocao();
+                }
+                else if (RespostaUsuarioExcluir == "3")
+                {
+                    navegarTransporteRemocao();
+                }
+                else if (RespostaUsuarioExcluir == "4")
+                {
+                    navegarViagemRemocao();
+                }
+                else
+                {
+                    Console.WriteLine("Opção inválida! Tente novamente.");
+                }
+            } while (RespostaUsuarioExcluir != "5");
+        }
+
         private static void navegarPlanetaRemocao()
         {
             try
@@ -399,6 +675,73 @@ namespace InterplanetaryTrip
             }
         }
 
+        private static void navegarClienteRemocao()
+        {
+            try
+            {
+                Console.WriteLine("Digite o nome do cliente que voce deseja excluir:");
+                var nomeCliente = Console.ReadLine();
+                RepositorioCrud<Cliente> operacaoCliente = new RepositorioCrud<Cliente>();
+                var clientes = operacaoCliente.Consultar("cliente_sps", nomeCliente, "@Nome");
+                foreach (var cliente in clientes)
+                {
+                    Console.WriteLine(cliente.ToString());
+                }
+                Console.WriteLine("Informe o id do planeta para ser excluido: ");
+                var idCliente = Console.ReadLine();
+                operacaoCliente.Remover("cliente_spd", Convert.ToInt32(idCliente), "@id");
+            }
+            catch (Exception e)
+            {
+                LogError(e);
+
+            }
+        }
+
+        private static void navegarViagemRemocao()
+        {
+            try
+            {
+                Console.WriteLine("Digite o id da viagem que voce deseja excluir:");
+                var idViagem = Convert.ToInt32(Console.ReadLine());
+                RepositorioCrud<Viagem> operacaoViagem = new RepositorioCrud<Viagem>();
+                var viagens = operacaoViagem.Consultar("viagemTabela_sps", idViagem, "@Id");
+                foreach (var viagem in viagens)
+                {
+                    Console.WriteLine(viagem.ToString());
+                }
+                Console.WriteLine("Informe o id da viagem para confirmar a remoçao: ");
+                idViagem = Convert.ToInt32(Console.ReadLine());
+                operacaoViagem.Remover("viagem_spd", idViagem, "@Id");
+            }
+            catch (Exception e)
+            {
+                LogError(e);
+            }
+        }
+
+        private static void navegarTransporteRemocao()
+        {
+            try
+            {
+                Console.WriteLine("Digite o nome do transporte que voce deseja excluir:");
+                var nomeTransporte = Console.ReadLine();
+                RepositorioCrud<Transporte> operacaoTransporte = new RepositorioCrud<Transporte>();
+                var transportes = operacaoTransporte.Consultar("transporte_sps", nomeTransporte, "@Nome");
+                foreach (var transporte in transportes)
+                {
+                    Console.WriteLine(transporte.ToString());
+                }
+                Console.WriteLine("Informe o id do transporte para ser excluido: ");
+                var idTransporte = Console.ReadLine();
+                operacaoTransporte.Remover("transporte_spd", Convert.ToInt32(idTransporte), "@Id");
+            }
+            catch (Exception e)
+            {
+                LogError(e);
+            }
+        }
+
         private static void LogError(Exception e)
         {
             string pasta = @"c:\temp\erros";
@@ -421,349 +764,6 @@ namespace InterplanetaryTrip
 
             }
 
-        }
-
-        private static void navegarMenuConsultaGeral()
-        {
-            var RespostaUsuarioConsulta = "";
-            do
-            {
-                Console.WriteLine("Menu 2 - Consulta");
-                Console.WriteLine("-------------------------------------------------");
-                Console.WriteLine("1 - Consultar Planeta");
-                Console.WriteLine("2 - Consultar Cliente");
-                Console.WriteLine("3 - Consultar Transporte");
-                Console.WriteLine("4 - Consultar Viagem");
-                Console.WriteLine("5 - Voltar");
-                RespostaUsuarioConsulta = Console.ReadLine();
-                if (RespostaUsuarioConsulta == "1")
-                {
-                    navegarConsultaPlaneta();
-                }
-                else if (RespostaUsuarioConsulta == "2")
-                {
-                    navegarConsultaCliente();
-                }
-                else if (RespostaUsuarioConsulta == "3")
-                {
-                    navegarConsultaTransporte();
-                }
-                else if (RespostaUsuarioConsulta == "4")
-                {
-                    navegarConsultaViagem();
-                }
-                else
-                {
-                    Console.WriteLine("Opção inválida! Tente novamente.");
-                }
-            } while (RespostaUsuarioConsulta != "5");
-        }
-
-        private static void navegarConsultaViagem()
-        {
-            try
-            {
-                Console.WriteLine("1 - Consulta específica");
-                Console.WriteLine("2 - Consultar todas as viagens de um cliente");
-                var respostaConsulta = Console.ReadLine();
-                if (respostaConsulta == "1")
-                {
-                    Console.WriteLine("Qual o id da viagem que você deseja consultar?");
-                    var respostaConsultaViagem = Console.ReadLine();
-                    RepositorioCrud<ViagemConsulta> consultaCliente = new RepositorioCrud<ViagemConsulta>();
-                    var viagens = consultaCliente.Consultar("viagem_sps", Convert.ToInt32(respostaConsultaViagem), "@Id");
-                    foreach (var item in viagens)
-                    {
-                        Console.WriteLine(item.ToString());
-                    }
-                }else if(respostaConsulta == "2")
-                {
-                    Console.WriteLine("Qual o nome do cliente?");
-                    var nomeCliente = Console.ReadLine();   
-                    Console.WriteLine("Qual o id do cliente?");
-                    var idCliente = Convert.ToInt32(Console.ReadLine());
-                    var pasta = @"c:\temp\clientes\" + nomeCliente + "_" + idCliente;
-                    if (Directory.Exists(pasta))
-                    {
-                        var viagens = Directory.GetFiles(pasta);
-                        foreach (var viagem in viagens)
-                        {
-                            StreamReader conteudoArquivo = new StreamReader(viagem);
-                            string conteudoViagem = conteudoArquivo.ReadToEnd();
-                            Console.WriteLine(conteudoViagem);
-                        }
-                    }else
-                    {
-                        Console.WriteLine("Você digitou alguma informação errada!");
-                    }           
-                }
-            }
-            catch (Exception e)
-            {
-                LogError(e);
-
-            }
-        }
-
-        private static void navegarConsultaTransporte()
-        {
-            try
-            {
-                Console.WriteLine("Qual o nome do transporte que você deseja consultar?");
-                var respostaConsultaTransporte = Console.ReadLine();
-                RepositorioCrud<Transporte> consultaCliente = new RepositorioCrud<Transporte>();
-                var transportes = consultaCliente.Consultar("transporte_sps", respostaConsultaTransporte, "@Nome");
-                foreach (var item in transportes)
-                {
-                    Console.WriteLine(item.ToString());
-
-                }
-            }
-            catch (Exception e)
-            {
-                LogError(e);
-
-            }
-        }
-
-        private static void navegarConsultaCliente()
-        {
-            try
-            {
-                Console.WriteLine("Qual o nome do cliente que você deseja consultar?");
-                var respostaConsultaCliente = Console.ReadLine();
-                RepositorioCrud<Cliente> consultaCliente = new RepositorioCrud<Cliente>();
-                var clientes = consultaCliente.Consultar("cliente_sps", respostaConsultaCliente, "@Nome");
-                foreach (var item in clientes)
-                {
-                    Console.WriteLine(item.ToString());
-
-                }
-            }
-            catch (Exception e)
-            {
-                LogError(e);
-
-            }
-        }
-
-        private static void navegarConsultaPlaneta()
-        {
-            try
-            {
-                Console.WriteLine("Qual o nome do planeta voce deseja consultar?");
-                var respostaConsultaPlaneta = Console.ReadLine();
-                RepositorioCrud<Planeta> consultaPlaneta = new RepositorioCrud<Planeta>();
-                var planetas = consultaPlaneta.Consultar("planeta_sps", respostaConsultaPlaneta, "@Nome");
-                if (planetas.Count == 0)
-                    Console.WriteLine("Não existe um planeta com o nome {0}", respostaConsultaPlaneta);
-                foreach (var item in planetas)
-                {
-                    Console.WriteLine(item.ToString());
-
-                }
-            }
-            catch (Exception e)
-            {
-                LogError(e);
-
-            }
-        }
-
-        private static void navegarMenuCadastroGeral()
-        {
-            var respostaUsuarioCadastro = "";
-            do
-            {
-                Console.WriteLine("Menu 1 - Cadastro");
-                Console.WriteLine("-------------------------------------------------");
-                Console.WriteLine("1 - Cadastrar Planeta");
-                Console.WriteLine("2 - Cadastrar Cliente");
-                Console.WriteLine("3 - Cadastrar Transporte");
-                Console.WriteLine("4 - Cadastrar Viagem");
-                Console.WriteLine("5 - Voltar");
-                respostaUsuarioCadastro = Console.ReadLine();
-                if (respostaUsuarioCadastro == "1")
-                {
-                    navegarCadastroPlaneta();
-
-                }
-                else if (respostaUsuarioCadastro == "2")
-                {
-                    navegarCadastroCliente();
-                }
-                else if (respostaUsuarioCadastro == "3")
-                {
-                    navegarCadastroTransporte();
-
-                }
-                else if (respostaUsuarioCadastro == "4")
-                {
-                    navegarCadastroViagem();
-
-                }
-                else
-                {
-                    Console.WriteLine("Opção inválida! Tente novamente.");
-                }
-            } while (respostaUsuarioCadastro != "5");
-
-        }
-
-        private static void navegarCadastroViagem()
-        {
-            Console.WriteLine("Cadastro de Viagem");
-            Console.WriteLine("---------------------");
-            Console.WriteLine("Id Planeta origem:");
-            var idPlanetaOrigem = Console.ReadLine();
-            Console.WriteLine("Id Planeta destino:");
-            var idPlanetaDestino = Console.ReadLine();
-            Console.WriteLine("Id Cliente:");
-            var idCliente = Console.ReadLine();
-            Console.WriteLine("Id Transporte:");
-            var idTransporte = Console.ReadLine();
-            Console.WriteLine("Valor: R$");
-            var valor = Console.ReadLine();
-            Console.WriteLine("Tempo:");
-            var tempo = Console.ReadLine();
-            try
-            {
-                Viagem viagem = new Viagem(Convert.ToInt32(idPlanetaOrigem), Convert.ToInt32(idPlanetaDestino),
-                    Convert.ToInt32(idCliente), Convert.ToInt32(idTransporte), Convert.ToDecimal(valor), tempo);
-                var repositorioViagem = new RepositorioCrud<Viagem>();
-                repositorioViagem.Cadastrar(viagem, "viagem_spi");
-                var consultarCliente = new RepositorioCrud<Cliente>();
-                var clientes = consultarCliente.Consultar("cliente_spsid", viagem.IdCliente, "@Id");
-                string raiz = @"c:\temp\clientes";
-                DateTime day = DateTime.Now;
-                foreach (var cliente in clientes)
-                {
-                    if (viagem.IdCliente == cliente.Id)
-                    {
-                        string pasta = Path.Combine(raiz, cliente.Nome + "_" + cliente.Id);
-                        if (!Directory.Exists(pasta))
-                        {
-                            Directory.CreateDirectory(pasta);
-                        }
-                        var repositorioConsultaViagem = new RepositorioCrud<ViagemConsulta>();
-                        var dadosViagem = repositorioConsultaViagem.Consultar("viagemTabelaCliente_sps", viagem.IdCliente, "@IdCliente");
-                        foreach (var itemViagem in dadosViagem)
-                        {
-                            string arquivo = Path.Combine(pasta, "Ticket_" + itemViagem.Id + "_" + string.Format("{0:dd-MM-yyyy}", day) + ".txt");
-                            string mensagem = itemViagem.ToString();
-                            File.WriteAllText(arquivo, mensagem);
-                        }
-                    }
-                }
-
-            }
-            catch (Exception e)
-            {
-                LogError(e);
-            }
-        }
-
-        private static void navegarCadastroTransporte()
-        {
-            try
-            {
-                Console.WriteLine("Cadastro de Transporte");
-                Console.WriteLine("---------------------");
-                Console.WriteLine("Nome do transporte:");
-                var nomeTransporte = Console.ReadLine();
-                Console.WriteLine("Terreno(AR/ TERRA/ MAR/ TELETRANSPORTE):");
-                var terreno = Console.ReadLine();
-                Transporte transporte = new Transporte(nomeTransporte, terreno);
-                var repositorioTransporte = new RepositorioCrud<Transporte>();
-                repositorioTransporte.Cadastrar(transporte, "transporte_spi");
-            }
-            catch (Exception e)
-            {
-                LogError(e);
-            }
-        }
-
-        private static void navegarCadastroCliente()
-        {
-            Console.WriteLine("Cadastro de Cliente");
-            Console.WriteLine("---------------------");
-            Console.WriteLine("Nome Completo:");
-            var Nome = Console.ReadLine();
-            Console.WriteLine("Número do Documento:");
-            var Documento = Console.ReadLine();
-            Console.WriteLine("Tipo da éspecie:");
-            var TipoEspecie = Console.ReadLine();
-            Console.WriteLine("Cor:");
-            var Cor = Console.ReadLine();
-            Console.WriteLine("Quantidade de Braços:");
-            var QtdBracos = Console.ReadLine();
-            Console.WriteLine("Quantidade de Pernas:");
-            var QtdPernas = Console.ReadLine();
-            Console.WriteLine("Quantidade de Cabeça:");
-            var QtdCabeca = Console.ReadLine();
-            Console.WriteLine("Você respira?");
-            var Respira = Console.ReadLine().ToLower();
-            var RespostaRespira = true;
-
-            if (Respira == "sim")
-            {
-                RespostaRespira = true;
-            }
-            else
-            {
-                RespostaRespira = false;
-            }
-
-            try
-            {
-                Cliente cliente = new Cliente(Nome, Documento, TipoEspecie, Cor, Convert.ToInt32(QtdBracos), Convert.ToInt32(QtdPernas), Convert.ToInt32(QtdCabeca), RespostaRespira);
-                RepositorioCrud<Cliente> repositorioCliente = new RepositorioCrud<Cliente>();
-
-                repositorioCliente.Cadastrar(cliente, "cliente_spi");
-                var clienteLogConsulta = repositorioCliente.Consultar("cliente_sps", cliente.Nome, "@Nome");
-                string raiz = @"c:\temp\clientes";
-                string pasta = "";
-                foreach (var item in clienteLogConsulta)
-                {
-                    if (item.Nome == cliente.Nome)
-                    {
-                        pasta = Path.Combine(raiz, item.Nome + "_" + item.Id);
-                        if (!Directory.Exists(pasta))
-                        {
-                            Directory.CreateDirectory(pasta);
-                        }
-                    }
-                }
-
-            }
-            catch (Exception e)
-            {
-                LogError(e);
-
-            }
-        }
-
-        private static void navegarCadastroPlaneta()
-        {
-            Console.WriteLine("Cadastro de Planeta");
-            Console.WriteLine("---------------------");
-            Console.WriteLine("Nome do Planeta:");
-            var NomePlaneta = Console.ReadLine();
-            Console.WriteLine("Descrição do Planeta:");
-            var DescricaoPlaneta = Console.ReadLine();
-            Console.WriteLine("Possui Oxigênio?");
-            var PossuiOxigenio = Console.ReadLine().ToLower() == "Sim" ? true : false;
-            try
-            {
-                Planeta Planeta = new Planeta(NomePlaneta, DescricaoPlaneta, PossuiOxigenio);
-                var RepositorioPlaneta = new RepositorioCrud<Planeta>();
-                RepositorioPlaneta.Cadastrar(Planeta, "planeta_spi");
-            }
-            catch (Exception e)
-            {
-                LogError(e);
-
-            }
         }
     }
 }
