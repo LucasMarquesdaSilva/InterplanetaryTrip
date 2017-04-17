@@ -478,7 +478,24 @@ namespace InterplanetaryTrip
                     }
                 }else if(respostaConsulta == "2")
                 {
-
+                    Console.WriteLine("Qual o nome do cliente?");
+                    var nomeCliente = Console.ReadLine();   
+                    Console.WriteLine("Qual o id do cliente?");
+                    var idCliente = Convert.ToInt32(Console.ReadLine());
+                    var pasta = @"c:\temp\clientes\" + nomeCliente + "_" + idCliente;
+                    if (Directory.Exists(pasta))
+                    {
+                        var viagens = Directory.GetFiles(pasta);
+                        foreach (var viagem in viagens)
+                        {
+                            StreamReader conteudoArquivo = new StreamReader(viagem);
+                            string conteudoViagem = conteudoArquivo.ReadToEnd();
+                            Console.WriteLine(conteudoViagem);
+                        }
+                    }else
+                    {
+                        Console.WriteLine("Você digitou alguma informação errada!");
+                    }           
                 }
             }
             catch (Exception e)
