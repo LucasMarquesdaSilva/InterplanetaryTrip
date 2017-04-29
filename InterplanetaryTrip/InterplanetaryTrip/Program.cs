@@ -20,6 +20,7 @@ namespace InterplanetaryTrip
                 Console.WriteLine("Bem vindo ao Sistema de Viagens Interplanetárias!");
                 Console.WriteLine("-------------------------------------------------");
                 Console.WriteLine("\n\rMenu");
+                Console.WriteLine("-------------------------------------------------");
                 Console.WriteLine("1 - Cadastro");
                 Console.WriteLine("2 - Consulta");
                 Console.WriteLine("3 - Atualização");
